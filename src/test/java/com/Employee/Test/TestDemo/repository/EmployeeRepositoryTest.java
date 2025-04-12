@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @Import(TestContainerConfiguration.class)
 //@SpringBootTest  // this will load whole spring application so it will take more time to run test cases;
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED) // ye test database create karta hai it will not perform  database operation in actual database
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED) // ye test database create karta hai it will not perform  database operation in actual database
 @DataJpaTest // it will create empty  test table (production table pe kuch v impact nahi hota hai) and ye sare test method ko run krne ke bad databse se value remove kr dega taki new test method ke lie database empty mile
 class EmployeeRepositoryTest {
 

@@ -2,6 +2,7 @@ package com.Employee.Test.TestDemo.service;
 
 import com.Employee.Test.TestDemo.dto.EmployeeDTO;
 import com.Employee.Test.TestDemo.entity.EmployeeEntity;
+import com.Employee.Test.TestDemo.exception.ResourceNotFoundException;
 import com.Employee.Test.TestDemo.repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,8 @@ public class EmployeeService {
             EmployeeDTO employeeDTO=modelMapper.map(employeeEntity, EmployeeDTO.class);
             return new ResponseEntity<>(employeeDTO,HttpStatus.OK);
         }
-        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+       // return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        throw new ResourceNotFoundException("Resource Not Found Employee Id"+employeeId);
     }
 
     public ResponseEntity<List<EmployeeDTO>> getAllEmployee() {
@@ -46,12 +48,14 @@ public class EmployeeService {
     }
 
     public ResponseEntity<EmployeeDTO> deleteEmployee(Long employeeId) {
-        if(employeeRepository.existsById(employeeId)){
-            EmployeeEntity employeeEntity=employeeRepository.findById(employeeId).get();
-            EmployeeDTO employeeDTO=modelMapper.map(employeeEntity, EmployeeDTO.class);
-            return new ResponseEntity<>(employeeDTO,HttpStatus.OK);
+        if (employeeRepository.existsById(employeeId)) {
+            EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+            EmployeeDTO employeeDTO = modelMapper.map(employeeEntity, EmployeeDTO.class);
+            employeeRepository.deleteById(employeeId); // Ensure this line is present
+            return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null,HttpStatus.OK);
+       // return new ResponseEntity<>(null,HttpStatus.OK);
+        throw new ResourceNotFoundException("Resource Not Found Employee Id"+employeeId);
     }
 
     public ResponseEntity<List<EmployeeDTO>> getAllEmployeeByEmail(String email) {
